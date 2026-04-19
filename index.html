@@ -29,8 +29,10 @@
         fbq('track', 'Search', {}, { eventID: eventId });
 
         const fbp = document.cookie.split('; ').find(row => row.startsWith('_fbp='))?.split('=')[1];
-        const fbc = document.cookie.split('; ').find(row => row.startsWith('_fbc='))?.split('=')[1];
-
+        const fbclid = new URLSearchParams(window.location.search).get('fbclid');                                                                                                                
+  const fbc = fbclid                                                                                                                                                                       
+      ? `fb.1.${Date.now()}.${fbclid}`
+      : document.cookie.split('; ').find(row => row.startsWith('_fbc='))?.split('=')[1];
         // DISPARO SERVIDOR (FBC E FBP SEGUROS)
         try {
             fetch('/api/lead', {
