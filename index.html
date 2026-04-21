@@ -15,7 +15,7 @@
     s.parentNode.insertBefore(t,s)}(window, document,'script',
     'https://connect.facebook.net/en_US/fbevents.js');
     
-    fbq('init', '1425994342559573');
+    fbq('init', '1370157767963562');
     fbq('track', 'PageView');
 
     // FUNÇÃO DIRETA SEM MODAL (Comunicação Blindada)
@@ -23,7 +23,7 @@
         if (event) event.preventDefault();
         
         const linkDestino = "https://rd.redirecionar.online/"; 
-        const eventId = 'lead_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
+        const eventId = 'Search' + Date.now() + '_' + Math.floor(Math.random() * 1000);
 
         // DISPAROS NAVEGADOR
         fbq('track', 'Search', {}, { eventID: eventId });
