@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Bingo Premiado – Acesso Gratuito</title>
+    <title>Bingo Premiado</title>
 
     <script>
     !function(f,b,e,v,n,t,s)
@@ -40,303 +40,159 @@
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 
     <style>
-        :root {
-            --green: #00EC51;
-            --green-glow: rgba(0,236,81,0.4);
-            --yellow: #FFE600;
-            --yellow-glow: rgba(255,230,0,0.4);
-            --orange: #ff6a00;
-        }
-
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            background: radial-gradient(ellipse at top, #002009 0%, #000e01 70%);
+            background: #000e01;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             font-family: 'Inter', sans-serif;
-            padding: 14px;
-            overflow-x: hidden;
+            padding: 24px 20px;
+            color: #fff;
         }
 
-        /* ── TOAST ── */
-        .toast {
-            position: fixed;
-            top: 14px;
-            left: 50%;
-            transform: translate(-150vw, 0);
-            background: #001a03;
-            border: 1px solid #02FF6B;
-            border-radius: 14px;
-            padding: 10px 16px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            z-index: 9999;
-            transition: transform 0.55s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.9);
-            white-space: nowrap;
-        }
-        .toast.show { transform: translate(-50%, 0); }
-        .toast-dot { width: 8px; height: 8px; background: var(--green); border-radius: 50%; box-shadow: 0 0 8px var(--green); flex-shrink: 0; animation: blink 1s infinite; }
-        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
-        .toast-text { color: #fff; font-size: 13px; font-weight: 500; }
-        .toast-text b { color: var(--yellow); }
-
-        /* ── CARD ── */
-        .card {
+        .wrap {
             width: 100%;
-            max-width: 390px;
-            background: #001403;
-            border: 1.5px solid #02FF6B;
-            border-radius: 24px;
-            padding: 20px 18px 26px;
+            max-width: 360px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            box-shadow: 0 0 60px rgba(0,236,81,0.1), 0 20px 60px rgba(0,0,0,0.8);
-        }
-
-        /* ── VAGAS ── */
-        .vagas-box {
-            width: 100%;
-            background: rgba(255,230,0,0.07);
-            border: 1px solid var(--yellow);
-            border-radius: 10px;
-            padding: 8px 14px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 8px;
-            animation: pulse-y 2s ease-in-out infinite;
-        }
-        @keyframes pulse-y {
-            0%,100% { box-shadow: 0 0 0 rgba(255,230,0,0); }
-            50% { box-shadow: 0 0 14px rgba(255,230,0,0.25); }
-        }
-        .vagas-text { font-size: 12px; font-weight: 700; color: #ccc; text-transform: uppercase; letter-spacing: 0.5px; }
-        .vagas-num { font-family: 'Bebas Neue'; font-size: 26px; color: var(--yellow); line-height: 1; }
-
-        .vagas-track {
-            width: 100%;
-            height: 4px;
-            background: rgba(255,255,255,0.06);
-            border-radius: 999px;
-            overflow: hidden;
-            margin-bottom: 18px;
-        }
-        .vagas-fill {
-            height: 100%;
-            border-radius: 999px;
-            background: linear-gradient(90deg, var(--yellow), var(--orange));
-            transition: width 1.2s ease;
-        }
-
-        /* ── BILHETE ANIMADO ── */
-        .bilhete-wrap {
-            width: 100%;
-            background: #fff;
-            border-radius: 14px;
-            overflow: hidden;
-            margin-bottom: 18px;
-            box-shadow: 0 4px 30px rgba(0,0,0,0.5);
-        }
-        .bilhete-header {
-            background: #1a1a2e;
-            padding: 10px 14px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .bilhete-title { color: #fff; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
-        .bilhete-odds { background: var(--green); color: #000; font-size: 13px; font-weight: 800; padding: 4px 10px; border-radius: 6px; font-family: 'Bebas Neue'; letter-spacing: 1px; }
-
-        .bilhete-jogo {
-            display: flex;
-            align-items: center;
-            padding: 10px 14px;
-            border-bottom: 1px solid #f0f0f0;
-            gap: 10px;
-        }
-        .bilhete-jogo:last-of-type { border-bottom: none; }
-        .jogo-info { flex: 1; }
-        .jogo-times { font-size: 12px; font-weight: 700; color: #111; }
-        .jogo-mercado { font-size: 10px; color: #888; margin-top: 1px; }
-        .jogo-palpite {
-            font-size: 11px;
-            font-weight: 800;
-            color: #1a1a2e;
-            background: #f0f0f0;
-            padding: 4px 8px;
-            border-radius: 6px;
-            white-space: nowrap;
-            transition: background 0.4s, color 0.4s;
-            flex-shrink: 0;
-        }
-        .jogo-palpite.acertou { background: #d4f5e2; color: #006b2b; }
-        .jogo-check {
-            font-size: 16px;
-            opacity: 0;
-            transform: scale(0.5);
-            transition: opacity 0.4s ease, transform 0.4s ease;
-            flex-shrink: 0;
-            width: 20px;
+            gap: 20px;
             text-align: center;
         }
-        .jogo-check.show { opacity: 1; transform: scale(1); }
 
-        .bilhete-footer {
-            background: #f8f8f8;
-            padding: 10px 14px;
+        /* TAG */
+        .tag {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: #00EC51;
+            background: rgba(0,236,81,0.08);
+            border: 1px solid rgba(0,236,81,0.2);
+            border-radius: 999px;
+            padding: 6px 16px;
+        }
+
+        /* HEADLINE */
+        .headline {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(48px, 14vw, 64px);
+            line-height: 0.9;
+            letter-spacing: 1px;
+        }
+        .headline .white { color: #fff; }
+        .headline .green {
+            color: #00EC51;
+            text-shadow: 0 0 40px rgba(0,236,81,0.5);
+        }
+
+        /* COPY */
+        .copy {
+            font-size: 15px;
+            color: #aaa;
+            line-height: 1.6;
+            max-width: 300px;
+        }
+        .copy strong { color: #fff; }
+
+        /* DIVISOR */
+        .divider {
+            width: 40px;
+            height: 2px;
+            background: #00EC51;
+            border-radius: 999px;
+            opacity: 0.4;
+        }
+
+        /* LISTA SIMPLES */
+        .lista {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 100%;
+            text-align: left;
+        }
+        .lista-item {
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            gap: 10px;
+            font-size: 13px;
+            color: #ccc;
         }
-        .bilhete-aposta { font-size: 11px; color: #888; }
-        .bilhete-retorno { font-size: 14px; font-weight: 800; color: #006b2b; }
-        .bilhete-retorno.pop { animation: pop 0.5s ease; }
-        @keyframes pop { 0%,100%{transform:scale(1)} 50%{transform:scale(1.2)} }
+        .lista-item span { color: #00EC51; font-size: 16px; flex-shrink: 0; }
+        .lista-item strong { color: #fff; }
 
-        /* ── HEADLINE ── */
-        .headline-block { text-align: center; margin-bottom: 16px; width: 100%; }
-        .hl-tag { font-size: 10px; font-weight: 700; color: #555; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 6px; }
-        .hl-white { font-family: 'Bebas Neue'; font-size: 26px; color: #fff; line-height: 1.1; }
-        .hl-green { font-family: 'Bebas Neue'; font-size: 44px; color: var(--green); line-height: 1; text-shadow: 0 0 30px var(--green-glow); }
-
-        /* ── FOTO ── */
-        .card-img {
-            width: 100%;
-            max-width: 240px;
-            height: auto;
-            border-radius: 14px;
-            margin-bottom: 16px;
-            filter: drop-shadow(0 8px 24px rgba(0,236,81,0.2));
-        }
-
-        /* ── BENEFÍCIOS ── */
-        .bens { width: 100%; display: flex; flex-direction: column; gap: 7px; margin-bottom: 18px; }
-        .ben {
-            display: flex; align-items: center; gap: 10px;
-            background: rgba(0,236,81,0.05);
-            border: 1px solid rgba(0,236,81,0.1);
-            border-radius: 10px; padding: 10px 12px;
-        }
-        .ben-icon { font-size: 17px; flex-shrink: 0; }
-        .ben-text { font-size: 12px; color: #ccc; line-height: 1.3; }
-        .ben-text strong { color: #fff; }
-
-        /* ── CTA ── */
+        /* BOTÃO */
         .btn-wrap {
             width: 100%;
             border-radius: 50px;
             padding: 2.5px;
             background: linear-gradient(135deg, #FFE600, #ff8c00, #FFE600);
             background-size: 200%;
-            animation: grad-move 2s linear infinite;
-            box-shadow: 0 0 30px var(--yellow-glow), 0 0 60px rgba(255,140,0,0.2);
+            animation: grad 2s linear infinite;
+            box-shadow: 0 0 30px rgba(255,200,0,0.4), 0 0 60px rgba(255,120,0,0.2);
         }
-        @keyframes grad-move { 0%{background-position:0%} 50%{background-position:100%} 100%{background-position:0%} }
+        @keyframes grad { 0%{background-position:0%} 50%{background-position:100%} 100%{background-position:0%} }
+
         .btn {
-            display: flex; flex-direction: column; align-items: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             width: 100%;
             background: linear-gradient(135deg, #ffb700, #ff6a00);
-            color: #fff; text-align: center;
-            font-family: 'Bebas Neue'; font-size: 22px; letter-spacing: 2px;
-            padding: 16px 14px 13px; border-radius: 48px;
-            text-decoration: none; text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+            color: #fff;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 22px;
+            letter-spacing: 2px;
+            padding: 18px 14px 14px;
+            border-radius: 48px;
+            text-decoration: none;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.3);
         }
         .btn-sub {
-            font-family: 'Inter'; font-size: 10px; font-weight: 600;
-            letter-spacing: 0; color: rgba(255,255,255,0.8);
-            text-shadow: none; margin-top: 2px;
+            font-family: 'Inter', sans-serif;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0;
+            color: rgba(255,255,255,0.8);
+            text-shadow: none;
+            margin-top: 3px;
         }
 
-        .cta-below { font-size: 11px; color: #444; text-align: center; margin-top: 10px; }
-        .cta-below span { color: var(--green); font-weight: 600; }
-
-        footer { margin-top: 14px; font-size: 10px; color: #444; text-align: center; line-height: 1.6; }
+        .rodape {
+            font-size: 11px;
+            color: #333;
+            line-height: 1.6;
+        }
+        .rodape span { color: #00EC51; font-weight: 600; }
     </style>
 </head>
 <body>
 
-    <div id="notif-toast" class="toast">
-        <div class="toast-dot"></div>
-        <p class="toast-text"><b id="notif-nome">Lucas</b> acabou de pegar o bilhete!</p>
-    </div>
+    <div class="wrap">
 
-    <div class="card">
+        <div class="tag">⚡ Acesso gratuito liberado</div>
 
-        <div class="vagas-box">
-            <span class="vagas-text">⚡ Bilhetes restantes hoje</span>
-            <span class="vagas-num" id="numero-vagas">12</span>
-        </div>
-        <div class="vagas-track">
-            <div class="vagas-fill" id="vagas-fill" style="width:88%"></div>
-        </div>
+        <h1 class="headline">
+            <span class="white">EU MANDO<br>O BILHETE,<br></span>
+            <span class="green">VOCÊ FAZ<br>O BINGO</span>
+        </h1>
 
-        <!-- BILHETE ANIMADO -->
-        <div class="bilhete-wrap">
-            <div class="bilhete-header">
-                <span class="bilhete-title">🎯 Bilhete do Dia</span>
-                <span class="bilhete-odds">ODD 4.30</span>
-            </div>
+        <p class="copy">
+            Todo dia eu analiso os jogos e monto o bilhete.<br>
+            <strong>Você só precisa pegar e jogar.</strong>
+        </p>
 
-            <div class="bilhete-jogo">
-                <div class="jogo-info">
-                    <div class="jogo-times">Botafogo</div>
-                    <div class="jogo-mercado">Resultado Final</div>
-                </div>
-                <div class="jogo-palpite" id="p1">Botafogo</div>
-                <span class="jogo-check" id="c1">✅</span>
-            </div>
-            <div class="bilhete-jogo">
-                <div class="jogo-info">
-                    <div class="jogo-times">Confiança</div>
-                    <div class="jogo-mercado">Ambas Marcam</div>
-                </div>
-                <div class="jogo-palpite" id="p2">Sim</div>
-                <span class="jogo-check" id="c2">✅</span>
-            </div>
-            <div class="bilhete-jogo">
-                <div class="jogo-info">
-                    <div class="jogo-times">Flamengo x Vitória</div>
-                    <div class="jogo-mercado">Resultado Final</div>
-                </div>
-                <div class="jogo-palpite" id="p3">Flamengo</div>
-                <span class="jogo-check" id="c3">✅</span>
-            </div>
+        <div class="divider"></div>
 
-            <div class="bilhete-footer">
-                <div class="bilhete-aposta">Entrada: R$50,00</div>
-                <div class="bilhete-retorno" id="retorno">Retorno: R$215,00</div>
-            </div>
-        </div>
-
-        <!-- HEADLINE -->
-        <div class="headline-block">
-            <p class="hl-tag">Acesso gratuito liberado</p>
-            <h2 class="hl-white">EU MANDO O BILHETE,</h2>
-            <h2 class="hl-green">VOCÊ FAZ O BINGO</h2>
-        </div>
-
-        <img class="card-img" src="https://grupogratuito.website/wp-content/uploads/2025/10/Jota_LP-WhatsApp-2.png" alt="Jogador Caro">
-
-        <div class="bens">
-            <div class="ben">
-                <div class="ben-icon">📲</div>
-                <div class="ben-text"><strong>Bilhete pronto</strong> no seu WhatsApp antes de cada rodada</div>
-            </div>
-            <div class="ben">
-                <div class="ben-icon">🔥</div>
-                <div class="ben-text"><strong>+83% de acerto</strong> nos últimos 30 dias — veja os prints</div>
-            </div>
-            <div class="ben">
-                <div class="ben-icon">🔒</div>
-                <div class="ben-text"><strong>100% gratuito</strong> — sem cartão, sem cadastro chato</div>
-            </div>
+        <div class="lista">
+            <div class="lista-item"><span>✅</span> <div>Bilhete pronto no <strong>WhatsApp</strong> antes de cada rodada</div></div>
+            <div class="lista-item"><span>✅</span> <div><strong>+83% de acerto</strong> nos últimos 30 dias</div></div>
+            <div class="lista-item"><span>✅</span> <div><strong>100% gratuito</strong> — sem cartão, sem enrolação</div></div>
         </div>
 
         <div class="btn-wrap">
@@ -346,86 +202,13 @@
             </a>
         </div>
 
-        <p class="cta-below"><span>🔒 Seguro e gratuito.</span> Sem enrolação.</p>
+        <p class="rodape">
+            <span>🔒 Seguro e gratuito.</span> Sem cadastro chato.<br><br>
+            <strong>Proibido para menores de 18 anos.</strong><br>
+            © 2025 – Jogador Caro
+        </p>
+
     </div>
 
-    <footer>
-        <strong>Proibido para menores de 18 anos.</strong><br>
-        © 2025 – Jogador Caro
-    </footer>
-
-    <script>
-        // Anima o bilhete acertando os jogos um a um
-        const jogos = [
-            { pId: 'p1', cId: 'c1' },
-            { pId: 'p2', cId: 'c2' },
-            { pId: 'p3', cId: 'c3' },
-        ];
-
-        function resetBilhete() {
-            jogos.forEach(({ pId, cId }) => {
-                document.getElementById(pId).classList.remove('acertou');
-                document.getElementById(cId).classList.remove('show');
-            });
-        }
-
-        function animarBilhete() {
-            resetBilhete();
-            let i = 0;
-            function next() {
-                if (i >= jogos.length) {
-                    const r = document.getElementById('retorno');
-                    r.classList.add('pop');
-                    setTimeout(() => r.classList.remove('pop'), 600);
-                    setTimeout(animarBilhete, 5000);
-                    return;
-                }
-                const { pId, cId } = jogos[i++];
-                document.getElementById(pId).classList.add('acertou');
-                document.getElementById(cId).classList.add('show');
-                setTimeout(next, 1200);
-            }
-            setTimeout(next, 1000);
-        }
-        animarBilhete();
-
-        // Vagas + toasts
-        const nomes = ["Lucas","Matheus","Gabriel","Felipe","Rodrigo","Rafael","Bruno","Daniel","Gustavo","Thiago","Henrique","Paulo","Ariel","Adriano","Diogo","Ricardo","Ivan","Luan","João","Pedro","Vitor","Caique","Douglas","Marcos","Ana","Fernanda","Juliana"];
-
-        function showToast(nome) {
-            const toast = document.getElementById('notif-toast');
-            document.getElementById('notif-nome').innerText = nome;
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 3200);
-        }
-
-        function iniciarFunil() {
-            let contagem = 12;
-            const display = document.getElementById('numero-vagas');
-            const fill = document.getElementById('vagas-fill');
-
-            function updateBar() {
-                fill.style.width = Math.min(99, 100 - contagem) + '%';
-            }
-
-            setTimeout(() => {
-                contagem--;
-                display.innerText = contagem;
-                updateBar();
-                showToast(nomes[Math.floor(Math.random() * nomes.length)]);
-            }, 900);
-
-            setInterval(() => {
-                if (contagem > 2 && Math.random() > 0.3) {
-                    contagem--;
-                    display.innerText = contagem;
-                    updateBar();
-                    setTimeout(() => showToast(nomes[Math.floor(Math.random() * nomes.length)]), 300);
-                }
-            }, 4500);
-        }
-
-        window.onload = iniciarFunil;
-    </script>
 </body>
 </html>
