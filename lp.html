@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Bingo Premiado</title>
+    <title>Análise Conectada — Sinais Esportivos</title>
 
     <script>
     !function(f,b,e,v,n,t,s)
@@ -20,7 +20,9 @@
     async function dispararLead(e) {
       e.preventDefault();
       const eventId = 'cr_' + Date.now();
+      
       fbq('track', 'CompleteRegistration', { currency: 'BRL', value: 0 }, { eventID: eventId });
+      
       try {
         await fetch('https://track-jp-production.up.railway.app/api/lead', {
           method: 'POST',
@@ -33,25 +35,28 @@
           })
         });
       } catch(err) {}
+      
       window.location.href = 'https://rd.redirecionar.online/';
     }
     </script>
 
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
 
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            background: #000e01;
+            background: #030408;
+            background: radial-gradient(circle at 50% 0%, #110d32 0%, #030408 70%);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            font-family: 'Inter', sans-serif;
-            padding: 24px 20px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            padding: 24px 16px;
             color: #fff;
+            overflow-x: hidden;
         }
 
         .wrap {
@@ -64,151 +69,254 @@
             text-align: center;
         }
 
-        /* TAG */
-        .tag {
+        /* HEADER DO TIPSTER */
+        .profile-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 6px 14px 6px 6px;
+            border-radius: 50px;
+        }
+        .profile-img {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 2px solid #00ff66;
+            object-fit: cover;
+            background: #111;
+        }
+        .profile-info { text-align: left; }
+        .profile-info .name {
+            font-size: 11px;
+            font-weight: 700;
+            color: #fff;
+        }
+        .profile-info .status {
+            font-size: 9px;
+            color: #00ff66;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .status-dot {
+            width: 4px;
+            height: 4px;
+            background: #00ff66;
+            border-radius: 50%;
+            box-shadow: 0 0 6px #00ff66;
+        }
+
+        /* HEADLINE ULTRA DIRETA */
+        .headline {
+            font-size: clamp(26px, 8vw, 32px);
+            font-weight: 800;
+            line-height: 1.2;
+            letter-spacing: -0.5px;
+        }
+        .headline span.highlight {
+            background: linear-gradient(90deg, #00ff66, #00e5ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* COPY CURTA */
+        .copy {
+            font-size: 14px;
+            color: #94a3b8;
+            line-height: 1.5;
+            max-width: 310px;
+        }
+
+        /* TITULO DO CARROSSEL */
+        .carousel-title {
             font-size: 11px;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 3px;
-            color: #00EC51;
-            background: rgba(0,236,81,0.08);
-            border: 1px solid rgba(0,236,81,0.2);
-            border-radius: 999px;
-            padding: 6px 16px;
-        }
-
-        /* HEADLINE */
-        .headline {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: clamp(48px, 14vw, 64px);
-            line-height: 0.9;
             letter-spacing: 1px;
+            color: #64748b;
+            margin-bottom: -10px;
+            width: 100%;
+            text-align: center;
         }
-        .headline .white { color: #fff; }
-        .headline .green {
-            color: #00EC51;
-            text-shadow: 0 0 40px rgba(0,236,81,0.5);
+        .carousel-title span {
+            color: #00ff66;
         }
 
-        /* COPY */
-        .copy {
+        /* CARROSSEL DE PRINTS AUTOMÁTICO */
+        .carousel-container {
+            width: 100%;
+            position: relative;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 14px;
+            padding: 4px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.5);
+            overflow: hidden;
+            aspect-ratio: 350 / 250;
+        }
+        .carousel-track {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+        .carousel-slide {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.6s ease-in-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .carousel-slide.active {
+            opacity: 1;
+            position: relative;
+        }
+        .carousel-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 10px;
+        }
+
+        /* INDICADORES DO CARROSSEL (BOLINHAS) */
+        .carousel-dots {
+            display: flex;
+            gap: 6px;
+            margin-top: -8px;
+            justify-content: center;
+        }
+        .dot {
+            width: 6px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transition: background 0.3s;
+        }
+        .dot.active {
+            background: #00ff66;
+            box-shadow: 0 0 6px #00ff66;
+        }
+
+        /* CTA PRINCIPAL ENXUTA */
+        .btn-container {
+            width: 100%;
+            margin-top: 5px;
+        }
+        .btn-action {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            background: linear-gradient(135deg, #00ff66 0%, #00b8d4 100%);
+            color: #030409;
             font-size: 15px;
-            color: #aaa;
-            line-height: 1.6;
-            max-width: 300px;
-        }
-        .copy strong { color: #fff; }
-
-        /* DIVISOR */
-        .divider {
-            width: 40px;
-            height: 2px;
-            background: #00EC51;
-            border-radius: 999px;
-            opacity: 0.4;
-        }
-
-        /* LISTA SIMPLES */
-        .lista {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            width: 100%;
-            text-align: left;
-        }
-        .lista-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 13px;
-            color: #ccc;
-        }
-        .lista-item span { color: #00EC51; font-size: 16px; flex-shrink: 0; }
-        .lista-item strong { color: #fff; }
-
-        /* BOTÃO */
-        .btn-wrap {
-            width: 100%;
-            border-radius: 50px;
-            padding: 2.5px;
-            background: linear-gradient(135deg, #FFE600, #ff8c00, #FFE600);
-            background-size: 200%;
-            animation: grad 2s linear infinite;
-            box-shadow: 0 0 30px rgba(255,200,0,0.4), 0 0 60px rgba(255,120,0,0.2);
-        }
-        @keyframes grad { 0%{background-position:0%} 50%{background-position:100%} 100%{background-position:0%} }
-
-        .btn {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 100%;
-            background: linear-gradient(135deg, #ffb700, #ff6a00);
-            color: #fff;
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 22px;
-            letter-spacing: 2px;
-            padding: 18px 14px 14px;
-            border-radius: 48px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 16px;
+            border-radius: 12px;
             text-decoration: none;
-            text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+            box-shadow: 0 0 25px rgba(0, 255, 102, 0.3);
+            animation: pulse-glow 1.8s infinite alternate;
         }
-        .btn-sub {
-            font-family: 'Inter', sans-serif;
+        @keyframes pulse-glow {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.02); }
+        }
+        .btn-action .sub-label {
             font-size: 10px;
             font-weight: 600;
-            letter-spacing: 0;
-            color: rgba(255,255,255,0.8);
-            text-shadow: none;
-            margin-top: 3px;
+            margin-top: 1px;
+            opacity: 0.8;
         }
 
-        .rodape {
-            font-size: 11px;
-            color: #333;
-            line-height: 1.6;
+        /* FOOTER DISCRETO */
+        .footer {
+            font-size: 10px;
+            color: #3b4759;
+            line-height: 1.4;
         }
-        .rodape span { color: #00EC51; font-weight: 600; }
     </style>
 </head>
 <body>
 
     <div class="wrap">
 
-        <div class="tag">⚡ Acesso gratuito liberado</div>
+        <div class="profile-container">
+            <img class="profile-img" src="SUA_FOTO_AQUI.jpg" alt="Tipster">
+            <div class="profile-info">
+                <div class="name">Análise Conectada</div>
+                <div class="status"><span class="status-dot"></span> Verificado no WhatsApp</div>
+            </div>
+        </div>
 
         <h1 class="headline">
-            <span class="white">EU MANDO<br>O BILHETE,<br></span>
-            <span class="green">VOCÊ FAZ<br>O BINGO</span>
+            Copie as melhores oportunidades de <span class="highlight">Odds Altas</span>
         </h1>
 
         <p class="copy">
-            Todo dia eu analiso os jogos e monto o bilhete.<br>
-            <strong>Você só precisa pegar e jogar.</strong>
+            Avaliamos os padrões matemáticos em tempo real. Receba os sinais direto no seu celular.
         </p>
 
-        <div class="divider"></div>
-
-        <div class="lista">
-            <div class="lista-item"><span>✅</span> <div>Bilhete pronto no <strong>WhatsApp</strong> antes de cada rodada</div></div>
-            <div class="lista-item"><span>✅</span> <div><strong>+83% de acerto</strong> nos últimos 30 dias</div></div>
-            <div class="lista-item"><span>✅</span> <div><strong>100% gratuito</strong> — sem cartão, sem enrolação</div></div>
+        <div class="carousel-title">
+            📊 Algumas de nossas milhares de <span>odds batidas</span>:
         </div>
 
-        <div class="btn-wrap">
-            <a href="https://rd.redirecionar.online/" class="btn" onclick="dispararLead(event)">
-                🚀 QUERO FAZER O BINGO
-                <span class="btn-sub">Gratuito · Acesso imediato · Vagas limitadas</span>
+        <div class="carousel-container">
+            <div class="carousel-track">
+                <div class="carousel-slide active"><img src="Layer-1.png" alt="Resultado 1"></div>
+                <div class="carousel-slide"><img src="Layer-2-2.png" alt="Resultado 2"></div>
+                <div class="carousel-slide"><img src="Layer-5-3.png" alt="Resultado 3"></div>
+                <div class="carousel-slide"><img src="Layer-6-5.png" alt="Resultado 4"></div>
+            </div>
+        </div>
+
+        <div class="carousel-dots">
+            <div class="dot active"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
+
+        <div class="btn-container">
+            <a href="https://rd.redirecionar.online/" class="btn-action" onclick="dispararLead(event)">
+                📥 QUERO COPIAR OS SINAIS
+                <span class="sub-label">Acesso Gratuito Disponível</span>
             </a>
         </div>
 
-        <p class="rodape">
-            <span>🔒 Seguro e gratuito.</span> Sem cadastro chato.<br><br>
-            <strong>Proibido para menores de 18 anos.</strong><br>
-            © 2025 – Jogador Caro
+        <p class="footer">
+            Aviso: Operações esportivas envolvem análises estatísticas. Gerencie sua banca.<br>
+            Proibido para menores de 18 anos. © 2026
         </p>
 
     </div>
+
+    <script>
+        const slides = document.querySelectorAll('.carousel-slide');
+        const dots = document.querySelectorAll('.dot');
+        let currentSlide = 0;
+
+        function nextSlide() {
+            slides[currentSlide].classList.remove('active');
+            dots[currentSlide].classList.remove('active');
+            
+            currentSlide = (currentSlide + 1) % slides.length;
+            
+            slides[currentSlide].classList.add('active');
+            dots[currentSlide].classList.add('active');
+        }
+
+        setInterval(nextSlide, 3000);
+    </script>
 
 </body>
 </html>
