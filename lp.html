@@ -25,7 +25,7 @@
       fbq('track', 'Lead', { currency: 'BRL', value: 0 }, { eventID: eventId });
       
       try {
-        await fetch('https://track-jp-production.up.railway.app/api/lead', {
+        await fetch('https://track-dc-production.up.railway.app/api/lead', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -235,3 +235,4 @@
     </section>
 </body>
 </html>
+
