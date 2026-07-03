@@ -16,26 +16,8 @@ n.queue=[];t=b.createElement(e);t.async=!0;
 t.src=v;s=b.getElementsByTagName(e)[0];
 s.parentNode.insertBefore(t,s)}(window, document,'script',
 'https://connect.facebook.net/en_US/fbevents.js');
-fbq('init', '961619428689288');
+fbq('init', '953058917590545');
 fbq('track', 'PageView');
-async function dispararLead(e) {
-  e.preventDefault();
-  const eventId = 'cr_' + Date.now();
-  fbq('track', 'CompleteRegistration', { currency: 'BRL', value: 0 }, { eventID: eventId });
-  try {
-    await fetch('https://track-jp-production.up.railway.app/api/lead', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        fbp: document.cookie.match(/_fbp=([^;]+)/)?.[1] || null,
-        fbc: document.cookie.match(/_fbc=([^;]+)/)?.[1] || null,
-        userAgent: navigator.userAgent,
-        eventId: eventId
-      })
-    });
-  } catch(err) {}
-  window.location.href = 'https://di.insightshub.cc/';
-}
 </script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -96,6 +78,10 @@ body::before{
   5%{opacity:0.12}
   95%{opacity:0.12}
   100%{transform:translateX(calc(100vw + 120px)) translateY(-60px) rotate(720deg);opacity:0}
+}
+@keyframes pulse-glow-blue{
+  0%,100%{box-shadow:0 0 36px rgba(34,158,217,0.4),0 4px 20px rgba(0,0,0,0.4)}
+  50%{box-shadow:0 0 56px rgba(34,158,217,0.65),0 4px 20px rgba(0,0,0,0.4)}
 }
 @keyframes pulse-glow{
   0%,100%{box-shadow:0 0 36px rgba(0,255,136,0.32),0 4px 20px rgba(0,0,0,0.4)}
@@ -269,18 +255,18 @@ nav{
 
 .btn-primary{
   display:inline-flex;align-items:center;justify-content:center;gap:10px;
-  background:linear-gradient(135deg,var(--green),#00CC6A);
-  color:#060606;font-size:16px;font-weight:800;
+  background:linear-gradient(135deg,#229ED9,#1A7FC1);
+  color:#fff;font-size:16px;font-weight:800;
   padding:17px 42px;border-radius:var(--radius-pill);
   text-decoration:none;
   transition:transform 0.25s ease, box-shadow 0.25s ease;
-  animation:pulse-glow 2.5s ease-in-out infinite;
+  animation:pulse-glow-blue 2.5s ease-in-out infinite;
   letter-spacing:0.3px;width:100%;max-width:360px;
 }
 .btn-primary:hover{
   transform:translateY(-3px) scale(1.02);
   animation:none;
-  box-shadow:0 0 60px rgba(0,255,136,0.5),0 8px 30px rgba(0,0,0,0.5);
+  box-shadow:0 0 60px rgba(34,158,217,0.6),0 8px 30px rgba(0,0,0,0.5);
 }
 .btn-icon{font-size:19px;line-height:1}
 
@@ -505,6 +491,7 @@ nav{
 <nav>
   <div class="container">
     <div class="nav-inner">
+      <a href="#" class="logo"></a>
       <span class="nav-badge">🔒 Gratuito</span>
     </div>
   </div>
@@ -550,12 +537,12 @@ nav{
         </h1>
 
         <p class="hero-subtitle">
-          Receba agora o bilhete da ODD100 e das demais oportunidades que envio todos os dias na minha comunidade gratuita.
+          Receba agora o bilhete da ODD100 e das demais oportunidades que envio todos os dias no meu grupo gratuito no Telegram.
         </p>
 
         <div class="cta-stack">
-          <a href="https://di.insightshub.cc/" class="btn-primary" onclick="dispararLead(event)">
-            📲 RECEBER NO WHATSAPP
+          <a href="https://smartico-dash.up.railway.app/track/2b978e7e-ce0e-4a1e-bdb7-5b29d12ac761/redirect?utm_campaign=esportiva" class="btn-primary" onclick="fbq('track', 'CompleteRegistration');">
+            📩 RECEBER NO TELEGRAM
             <span class="btn-icon">›</span>
           </a>
           <span class="cta-note">Sem cadastro · 100% gratuito</span>
@@ -649,7 +636,27 @@ matches.forEach((m, i) => {
         <span class="team-abbr">${m.a2}</span>
       </div>
     </div>
-
+    <div class="match-odds">
+      <div class="odd-left">
+        <span class="odd-label">Mercado</span>
+        <span class="odd-market-tag">🎯 ${m.market}</span>
+      </div>
+      <div class="odd-right">
+        <div class="lock-icon">${isLocked ? '🔒' : '✅'}</div>
+        <div>
+          <div class="odd-from">
+            <span class="odd-striked">${m.oddOld}</span>
+          </div>
+          <div class="odd-big${isLocked ? ' gradient-text' : ''}">${m.odd}</div>
+          <div class="odd-big-label">odd atual</div>
+        </div>
+      </div>
+    </div>
+    ${`<div style="margin-top:16px;text-align:center">
+      <a href="https://smartico-dash.up.railway.app/track/2b978e7e-ce0e-4a1e-bdb7-5b29d12ac761/redirect?utm_campaign=esportiva" onclick="fbq('track', 'CompleteRegistration');" style="display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#229ED9,#1A7FC1);color:#fff;font-size:13px;font-weight:800;padding:11px 28px;border-radius:999px;text-decoration:none;letter-spacing:0.5px;box-shadow:0 0 24px rgba(34,158,217,0.4);">
+        🔓 REVELAR ODD NO TELEGRAM
+      </a>
+    </div>`}
   `;
   cardsEl.appendChild(card);
 });
